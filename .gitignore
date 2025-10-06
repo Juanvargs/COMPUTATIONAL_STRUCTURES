@@ -1,4 +1,5 @@
-﻿**/build/
+﻿# Ignorar carpetas y archivos de compilación
+**/build/
 **/CMakeFiles/
 **/CMakeCache.txt
 **/cmake_install.cmake
