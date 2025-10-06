@@ -1,0 +1,44 @@
+[
+{
+  "directory": "C:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/build/debug",
+  "command": "C:\\ST\\STM32CubeCLT_1.19.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DDEBUG -IC:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/Inc -fdata-sections -ffunction-sections -Wl,--gc-sections -g -std=gnu11 -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -Wall -Wextra -Wpedantic -Wno-unused-parameter -Og -g3 -ggdb -o CMakeFiles\\refactroizacion_baremetal.dir\\Src\\main.c.obj -c C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Src\\main.c",
+  "file": "C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Src\\main.c",
+  "output": "CMakeFiles\\refactroizacion_baremetal.dir\\Src\\main.c.obj"
+},
+{
+  "directory": "C:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/build/debug",
+  "command": "C:\\ST\\STM32CubeCLT_1.19.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DDEBUG -IC:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/Inc -fdata-sections -ffunction-sections -Wl,--gc-sections -g -std=gnu11 -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -Wall -Wextra -Wpedantic -Wno-unused-parameter -Og -g3 -ggdb -o CMakeFiles\\refactroizacion_baremetal.dir\\Src\\gpio.c.obj -c C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Src\\gpio.c",
+  "file": "C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Src\\gpio.c",
+  "output": "CMakeFiles\\refactroizacion_baremetal.dir\\Src\\gpio.c.obj"
+},
+{
+  "directory": "C:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/build/debug",
+  "command": "C:\\ST\\STM32CubeCLT_1.19.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DDEBUG -IC:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/Inc -fdata-sections -ffunction-sections -Wl,--gc-sections -g -std=gnu11 -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -Wall -Wextra -Wpedantic -Wno-unused-parameter -Og -g3 -ggdb -o CMakeFiles\\refactroizacion_baremetal.dir\\Src\\rcc.c.obj -c C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Src\\rcc.c",
+  "file": "C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Src\\rcc.c",
+  "output": "CMakeFiles\\refactroizacion_baremetal.dir\\Src\\rcc.c.obj"
+},
+{
+  "directory": "C:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/build/debug",
+  "command": "C:\\ST\\STM32CubeCLT_1.19.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DDEBUG -IC:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/Inc -fdata-sections -ffunction-sections -Wl,--gc-sections -g -std=gnu11 -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -Wall -Wextra -Wpedantic -Wno-unused-parameter -Og -g3 -ggdb -o CMakeFiles\\refactroizacion_baremetal.dir\\Src\\systick.c.obj -c C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Src\\systick.c",
+  "file": "C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Src\\systick.c",
+  "output": "CMakeFiles\\refactroizacion_baremetal.dir\\Src\\systick.c.obj"
+},
+{
+  "directory": "C:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/build/debug",
+  "command": "C:\\ST\\STM32CubeCLT_1.19.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DDEBUG -IC:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/Inc -fdata-sections -ffunction-sections -Wl,--gc-sections -g -std=gnu11 -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -Wall -Wextra -Wpedantic -Wno-unused-parameter -Og -g3 -ggdb -o CMakeFiles\\refactroizacion_baremetal.dir\\Src\\syscall.c.obj -c C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Src\\syscall.c",
+  "file": "C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Src\\syscall.c",
+  "output": "CMakeFiles\\refactroizacion_baremetal.dir\\Src\\syscall.c.obj"
+},
+{
+  "directory": "C:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/build/debug",
+  "command": "C:\\ST\\STM32CubeCLT_1.19.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DDEBUG -IC:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/Inc -fdata-sections -ffunction-sections -Wl,--gc-sections -g -std=gnu11 -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -Wall -Wextra -Wpedantic -Wno-unused-parameter -Og -g3 -ggdb -o CMakeFiles\\refactroizacion_baremetal.dir\\Src\\sysmem.c.obj -c C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Src\\sysmem.c",
+  "file": "C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Src\\sysmem.c",
+  "output": "CMakeFiles\\refactroizacion_baremetal.dir\\Src\\sysmem.c.obj"
+},
+{
+  "directory": "C:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/build/debug",
+  "command": "C:\\ST\\STM32CubeCLT_1.19.0\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe -DDEBUG -IC:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO -g -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -Wall -Wextra -Wpedantic -Wno-unused-parameter -x assembler-with-cpp -MMD -MP -Og -g3 -ggdb -o CMakeFiles\\refactroizacion_baremetal.dir\\Startup\\startup_stm32l476rgtx.s.obj -c C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Startup\\startup_stm32l476rgtx.s",
+  "file": "C:\\Users\\juanv\\Documents\\projetc_estructuras\\LIBRERIA_GPIO\\Startup\\startup_stm32l476rgtx.s",
+  "output": "CMakeFiles\\refactroizacion_baremetal.dir\\Startup\\startup_stm32l476rgtx.s.obj"
+}
+]
