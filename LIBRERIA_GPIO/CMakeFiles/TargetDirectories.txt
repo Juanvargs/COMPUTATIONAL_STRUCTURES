@@ -1,3 +1,0 @@
-C:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/CMakeFiles/refactroizacion_baremetal.dir
-C:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/CMakeFiles/edit_cache.dir
-C:/Users/juanv/Documents/projetc_estructuras/LIBRERIA_GPIO/CMakeFiles/rebuild_cache.dir

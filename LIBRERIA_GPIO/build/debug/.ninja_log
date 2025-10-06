@@ -1,9 +1,0 @@
-# ninja log v5
-4	250	7814737119676784	CMakeFiles/refactroizacion_baremetal.dir/Src/main.c.obj	85f6756ba363d672
-19	252	7814737119599923	CMakeFiles/refactroizacion_baremetal.dir/Src/rcc.c.obj	519fe1be53bd3a87
-11	253	7814737119579831	CMakeFiles/refactroizacion_baremetal.dir/Src/gpio.c.obj	8ef4d4508fe75f13
-48	254	7814737119695794	CMakeFiles/refactroizacion_baremetal.dir/Startup/startup_stm32l476rgtx.s.obj	ba2c03da6d65ab7e
-26	255	7814737119736019	CMakeFiles/refactroizacion_baremetal.dir/Src/systick.c.obj	287217046049f89a
-33	335	7814737120720506	CMakeFiles/refactroizacion_baremetal.dir/Src/syscall.c.obj	5cdc6fc065fe4e27
-40	320	7814737120562148	CMakeFiles/refactroizacion_baremetal.dir/Src/sysmem.c.obj	c158168305271fdd
-336	650	7814737122253603	refactroizacion_baremetal.elf	4b6b177da9365609
