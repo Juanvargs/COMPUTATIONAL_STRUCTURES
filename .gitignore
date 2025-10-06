@@ -1,0 +1,10 @@
+﻿**/build/
+**/CMakeFiles/
+**/CMakeCache.txt
+**/cmake_install.cmake
+**/.ninja_*
+*.o
+*.elf
+*.bin
+*.hex
+*.map
