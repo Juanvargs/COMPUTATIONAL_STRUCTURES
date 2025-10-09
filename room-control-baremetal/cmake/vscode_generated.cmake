@@ -22,16 +22,20 @@ set(linker_script_SRC ${linker_script_SRC}
 
 # Sources
 set(sources_SRCS ${sources_SRCS}
-
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/uart.c
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/main.c
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/gpio.c
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/rcc.c
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/systick.c
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/syscall.c
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/sysmem.c
-	${CMAKE_CURRENT_SOURCE_DIR}/Startup/startup_stm32l476rgtx.s
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/gpio.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/rcc.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/systick.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/syscall.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/sysmem.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/nvic.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/isr.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/tim.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/room_control.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Startup/startup_stm32l476rgtx.s
 )
+
 
 # Include directories
 set(include_c_DIRS ${include_c_DIRS}
