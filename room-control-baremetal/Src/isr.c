@@ -1,9 +1,13 @@
 #include <stdint.h>
 #include "nvic.h"          // EXTI, NVIC registros
 #include "uart.h"          // USART2
-#include "room_control.h"  // handlers de la guía 9
+#include "room_control.h"  // prototipos de la app
 
 extern volatile uint32_t ms_counter;   // definido en main.c
+
+// === Eventos globales (los consume main) ===
+extern volatile uint8_t button_event;
+extern volatile char    uart_event_char;
 
 // ---- Debounce (timestamp del último flanco válido) ----
 static uint32_t last_btn_ms = 0;
@@ -20,7 +24,7 @@ void EXTI15_10_IRQHandler(void)
         }
         last_btn_ms = now;
 
-        room_control_on_button_press();   // flanco válido
+        button_event = 1;                 // ← evento para main (guía 10)
     }
 }
 
@@ -40,6 +44,6 @@ void USART2_IRQHandler(void)
     // Atiende TODOS los bytes pendientes
     while (USART2->ISR & (1U << 5)) {      // RXNE
         char b = (char)USART2->RDR;        // leer limpia RXNE
-        room_control_on_uart_receive(b);
+        uart_event_char = b;               // ← lo procesará main (guía 10)
     }
 }

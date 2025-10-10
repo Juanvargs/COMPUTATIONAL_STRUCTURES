@@ -191,8 +191,9 @@ void room_control_on_uart_receive(char received_char)
 
         default:
             // Atajo: dígito solo = duty 0..90% en pasos de 10
-            if (received_char >= '0' && received_char <= '9') {
-                idx = 0; // evita que el dígito entre al buffer de línea
+            // Solo si NO estamos escribiendo otra línea (idx == 0) y no hay 'B' pendiente
+            if (idx == 0 && b_pending == 0 &&
+                received_char >= '0' && received_char <= '9') {
                 uint32_t pct = (uint32_t)(received_char - '0') * 10u;
                 apply_pwm_percent(pct);
                 uart_send_string("OK digit\r\n");
@@ -218,8 +219,6 @@ void room_control_on_uart_receive(char received_char)
             return;
     }
 }
-
-
 
 
 
