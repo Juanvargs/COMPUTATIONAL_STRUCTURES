@@ -3,12 +3,24 @@
 #include "uart.h"          // USART2
 #include "room_control.h"  // handlers de la guía 9
 
+extern volatile uint32_t ms_counter;   // definido en main.c
+
+// ---- Debounce (timestamp del último flanco válido) ----
+static uint32_t last_btn_ms = 0;
+
 void EXTI15_10_IRQHandler(void)
 {
-    // PC13 está en EXTI13
     if (EXTI->PR1 & (1U << 13)) {
-        EXTI->PR1 = (1U << 13);          // limpiar pendiente
-        room_control_on_button_press();  // avisar a la app
+        EXTI->PR1 = (1U << 13);           // limpiar pendiente
+
+        // Debounce: ignora flancos dentro de 50 ms
+        uint32_t now = ms_counter;
+        if ((uint32_t)(now - last_btn_ms) < 50U) {
+            return; // rebote, no procesar
+        }
+        last_btn_ms = now;
+
+        room_control_on_button_press();   // flanco válido
     }
 }
 
@@ -19,13 +31,13 @@ void USART2_IRQHandler(void)
     // Limpia SOLO lo necesario y no drenes RDR salvo en ORE
     if (isr & (1U << 3)) {                 // ORE
         USART2->ICR = (1U << 3);
-        (void)USART2->RDR;                 // leer para drenar el overrun
+        (void)USART2->RDR;                 // drenar overrun
     }
     if (isr & (1U << 0)) { USART2->ICR = (1U << 0); } // PE
     if (isr & (1U << 1)) { USART2->ICR = (1U << 1); } // FE
     if (isr & (1U << 2)) { USART2->ICR = (1U << 2); } // NE
 
-    // Atiende TODOS los bytes que ya estén en el FIFO de recepción
+    // Atiende TODOS los bytes pendientes
     while (USART2->ISR & (1U << 5)) {      // RXNE
         char b = (char)USART2->RDR;        // leer limpia RXNE
         room_control_on_uart_receive(b);

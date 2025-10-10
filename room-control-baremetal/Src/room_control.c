@@ -5,6 +5,8 @@
 #include "tim.h"
 #include <stdint.h>
 
+static uint8_t b_pending = 0;   // 1 = esperando dígito después de 'B'
+
 /* === Toma del tick global (de main.c) === */
 extern volatile uint32_t ms_counter;
 
@@ -36,15 +38,36 @@ void room_control_init(void) {
 }
 
 static void apply_command(const char* s) {
-    // Saltar espacios iniciales
+    // --- Trim de espacios iniciales ---
     while (*s == ' ' || *s == '\t') s++;
 
-    // Aceptar "PWM" en mayúsc/minúsc y con espacios variables: "PWM 25", "pwm    75"
+    // ===== Caso 1: línea de 1 dígito ("5" -> 50%)
+    if (s[0] >= '0' && s[0] <= '9' && (s[1] == '\0' || s[1] == '\r' || s[1] == '\n' || s[1] == ' ' || s[1] == '\t')) {
+        uint32_t pct = (uint32_t)(s[0] - '0') * 10u;
+        apply_pwm_percent(pct);
+        uart_send_string("OK digit\r\n");
+        last_activity_ms = ms_counter;
+        return;
+    }
+
+    // ===== Caso 2: "B<d>" o "b<d>"  (B7 -> 70%)
+    if ((s[0] == 'B' || s[0] == 'b') && (s[1] >= '0' && s[1] <= '9')) {
+        // Acepta espacios después del dígito también
+        if (s[2] == '\0' || s[2] == '\r' || s[2] == '\n' || s[2] == ' ' || s[2] == '\t') {
+            uint32_t pct = (uint32_t)(s[1] - '0') * 10u;
+            apply_pwm_percent(pct);
+            uart_send_string("OK Bx\r\n");
+            last_activity_ms = ms_counter;
+            return;
+        }
+    }
+
+    // ===== Caso 3: "PWM <n>" (mayus/minus, con o sin espacios)
     if ((s[0]=='P' || s[0]=='p') &&
         (s[1]=='W' || s[1]=='w') &&
         (s[2]=='M' || s[2]=='m')) {
 
-        // Saltar hasta el primer dígito
+        // Saltar espacios tras "PWM"
         int i = 3;
         while (s[i] == ' ' || s[i] == '\t') i++;
 
@@ -66,6 +89,7 @@ static void apply_command(const char* s) {
         return;
     }
 
+    // ===== Nada coincidió
     uart_send_string("CMD?\r\n");
 }
 
@@ -106,9 +130,27 @@ void room_control_on_button_press(void)
 
 void room_control_on_uart_receive(char received_char)
 {
+    // Si veníamos de 'B', esperamos un dígito 0..9
+    if (b_pending) {
+        // descartar cualquier residuo previo de línea
+        idx = 0;
+
+        if (received_char >= '0' && received_char <= '9') {
+            uint32_t pct = (uint32_t)(received_char - '0') * 10u;
+            apply_pwm_percent(pct);
+            uart_send_string("OK Bx\r\n");
+            last_activity_ms = ms_counter;
+        } else {
+            uart_send_string("ERR Bx\r\n");
+        }
+        b_pending = 0;
+        return; // *** importante: no sigas al parser ***
+    }
+
     switch (received_char) {
         case 'h':
         case 'H':
+            idx = 0; // limpia buffer de línea
             apply_pwm_percent(100u);
             uart_send_string("OK h (100%)\r\n");
             last_activity_ms = ms_counter;
@@ -116,6 +158,7 @@ void room_control_on_uart_receive(char received_char)
 
         case 'l':
         case 'L':
+            idx = 0;
             apply_pwm_percent(0u);
             uart_send_string("OK l (0%)\r\n");
             last_activity_ms = ms_counter;
@@ -123,6 +166,7 @@ void room_control_on_uart_receive(char received_char)
 
         case 'O':
         case 'o':
+            idx = 0;
             current_state = ROOM_OCCUPIED;
             apply_pwm_percent(100u);
             uart_send_string("ROOM cmd: OCCUPIED\r\n");
@@ -131,25 +175,42 @@ void room_control_on_uart_receive(char received_char)
 
         case 'I':
         case 'i':
+            idx = 0;
             current_state = ROOM_IDLE;
             apply_pwm_percent(0u);
             uart_send_string("ROOM cmd: IDLE\r\n");
             last_activity_ms = ms_counter;
             return;
 
+        case 'B':
+        case 'b':
+            // vamos a esperar el siguiente char (debe ser 0..9)
+            idx = 0;        // evita que 'B' quede en el buffer de línea
+            b_pending = 1;  // activa modo "esperando dígito"
+            return;
+
         default:
-            // ===== Parser de línea interno para "PWM <n>" =====
-            // Acumula todo (letras, espacios, dígitos) hasta EOL y procesa aquí mismo
+            // Atajo: dígito solo = duty 0..90% en pasos de 10
+            if (received_char >= '0' && received_char <= '9') {
+                idx = 0; // evita que el dígito entre al buffer de línea
+                uint32_t pct = (uint32_t)(received_char - '0') * 10u;
+                apply_pwm_percent(pct);
+                uart_send_string("OK digit\r\n");
+                last_activity_ms = ms_counter;
+                return; // *** importante: no sigas al parser ***
+            }
+
+            // Mantener el parser "PWM <n>" (línea completa) para todo lo demás
             if (received_char == '\r' || received_char == '\n') {
                 if (idx > 0) {
                     cmd[idx] = 0;
-                    apply_command(cmd);   // esto imprime "OK PWM" o "ERR rango"
+                    apply_command(cmd);   // imprime "OK PWM" o "ERR rango"
                     idx = 0;
                     last_activity_ms = ms_counter;
                 }
             } else {
                 if (idx < sizeof(cmd) - 1) {
-                    cmd[idx++] = received_char;
+                    cmd[idx++] = received_char; // acumula para "PWM 25"
                 } else {
                     idx = 0; // overflow simple
                 }
@@ -157,6 +218,8 @@ void room_control_on_uart_receive(char received_char)
             return;
     }
 }
+
+
 
 
 

@@ -6,6 +6,13 @@
 #include "tim.h"
 #include "room_control.h"
 
+
+// --- Heartbeat y timeout del LED PA5 ---
+static volatile uint8_t  led_forced_on = 0;   // 1 mientras el LED está forzado encendido (botón)
+static volatile uint32_t led_on_time   = 0;   // ms cuando se encendió por última vez
+static volatile uint32_t hb_prev_ms    = 0;   // timestamp último parpadeo
+static volatile uint8_t  hb_state      = 0;   // estado actual del heartbeat (0/1)
+
 volatile uint32_t ms_counter = 17;
 static char rx_buffer[256];           // (se deja, aunque no lo usamos con ISR)
 static uint8_t rx_index = 0;          // (ídem)
@@ -52,30 +59,30 @@ int main(void)
         if (read_gpio(GPIOC, 13) != 0) {   // Botón presionado (según tu read_gpio)
             ms_counter = 0;                // reiniciar el contador de milisegundos
             set_gpio(GPIOA, 5);            // Encender LED
+            // NUEVO: marcar que está forzado y guardar el tiempo de encendido
+            led_forced_on = 1;
+            led_on_time   = ms_counter;
         }
-        if (ms_counter >= 3000) {          // 3 segundos
-            clear_gpio(GPIOA, 5);          // Apagar LED
-        }
 
-        // Barrido suave 0% -> 100% -> 0%, actualización cada 10 ms
-        // if ((uint32_t)(ms_counter - t_pwm) >= 10) {
-            // t_pwm = ms_counter;
-
-            // int16_t next = (int16_t)pwm_dc + pwm_dir;
-            // if (next >= 100) { next = 100; pwm_dir = -1; }
-            // if (next <=   0) { next =   0; pwm_dir = +1; }
-
-            // pwm_dc = (uint8_t)next;
-            // tim3_ch1_pwm_set_duty_cycle(pwm_dc);
-        // }
-
-        // --- Polling UART (desactivado; ahora usamos la ISR + room_control) ---
-        // if (USART2->ISR & (1 << 5)) { /* ... */ }
     }
 }
 
-// --- Manejador de la interrupción SysTick -----------------------------------
 void SysTick_Handler(void)
 {
     ms_counter++;
+
+    // --- Heartbeat: parpadeo de LD2 cada 500 ms cuando NO está forzado ---
+    if (!led_forced_on && (uint32_t)(ms_counter - hb_prev_ms) >= 500) {
+        hb_prev_ms = ms_counter;
+        hb_state ^= 1u;                 // alterna 0/1
+        if (hb_state) set_gpio(GPIOA, 5);
+        else          clear_gpio(GPIOA, 5);
+    }
+
+    // --- Timeout: si el LED está forzado, apaga a los 3 s y vuelve al heartbeat ---
+    if (led_forced_on && (uint32_t)(ms_counter - led_on_time) >= 3000) {
+        led_forced_on = 0;              // libera el control para que el heartbeat retome
+        clear_gpio(GPIOA, 5);
+        // (el heartbeat retomará en el siguiente tick de 500 ms)
+    }
 }
