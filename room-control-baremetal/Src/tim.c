@@ -5,6 +5,7 @@
 void tim3_ch1_pwm_init(uint32_t pwm_freq_hz)
 {
     // 1) PA6 como función alternativa AF2 (TIM3_CH1)
+    
     // Firma de tu API: init_gpio(PORT, pin, MODER, OTYPER, OSPEEDR, PUPDR, AFR)
     // MODER=0x02 (AF), OTYPER=0x00 (push-pull), OSPEEDR=0x01 (rápida),
     // PUPDR=0x00 (sin pull), AFR=0x02 (AF2 = TIM3_CH1 en PA6)

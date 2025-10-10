@@ -6,7 +6,7 @@
 #include "tim.h"
 #include "room_control.h"
 
-static volatile uint32_t ms_counter = 17;
+volatile uint32_t ms_counter = 17;
 static char rx_buffer[256];           // (se deja, aunque no lo usamos con ISR)
 static uint8_t rx_index = 0;          // (ídem)
 static uint8_t  pwm_dc = 0;           // duty actual (0..100)
@@ -36,13 +36,18 @@ int main(void)
     tim3_ch1_pwm_set_duty_cycle(pwm_dc);
     t_pwm = ms_counter;
 
-    uart_send_string("Sistema Inicializado!\r\n");
 
     // --- ROOM CONTROL (parser de comandos por UART) ---
     room_control_init();
     uart_send_string("Comando: PWM <0..100>\r\n");
 
+    room_control_app_init();
+
+
     while (1) {
+        
+        room_control_update();
+
         // Lógica del botón (del profe): enciende PA5 por 3s
         if (read_gpio(GPIOC, 13) != 0) {   // Botón presionado (según tu read_gpio)
             ms_counter = 0;                // reiniciar el contador de milisegundos
